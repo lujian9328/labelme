@@ -236,9 +236,13 @@ class MainWindow(QMainWindow, WindowMixin):
                 icon='color', tip=u'Change the fill color for this specific shape',
                 enabled=False)
 
-        labels = self.dock.toggleViewAction()
-        labels.setText('Show/Hide Label Panel')
-        labels.setShortcut('Ctrl+Shift+L')
+        toggleLabels = self.dock.toggleViewAction()
+        toggleLabels.setText('Show/Hide Label Panel')
+        toggleLabels.setShortcut('Ctrl+Shift+L')
+
+        self.tools = self.toolbar('Tools')
+        toggleTools = self.tools.toggleViewAction()
+        toggleTools.setText('Show/Hide Tools Panel')
 
         # Lavel list context menu.
         labelMenu = QMenu()
@@ -276,7 +280,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 (open, self.menus.recentFiles, save, saveAs, close, None, quit))
         addActions(self.menus.help, (help,))
         addActions(self.menus.view, (
-            labels, advancedMode, None,
+            toggleLabels, toggleTools, advancedMode, None,
             hideAll, showAll, None,
             zoomIn, zoomOut, zoomOrg, None,
             fitWindow, fitWidth))

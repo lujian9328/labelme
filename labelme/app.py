@@ -179,6 +179,9 @@ class MainWindow(QMainWindow, WindowMixin):
         copy = action('&Duplicate\nPolygon', self.copySelectedShape,
                 'Ctrl+D', 'copy', u'Create a duplicate of the selected polygon',
                 enabled=False)
+        merge = action('&Merge\nPolygons', self.mergeShape,
+                'Ctrl+M', 'copy', u'Merge polygons',
+                enabled=False)
 
         advancedMode = action('&Advanced Mode', self.toggleAdvancedMode,
                 'Ctrl+Shift+A', 'expert', u'Switch to advanced mode',
@@ -261,7 +264,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 zoomActions=zoomActions,
                 fileMenuActions=(open,save,saveAs,close,quit),
                 beginner=(), advanced=(),
-                editMenu=(edit, copy, delete, None, color1, color2),
+                editMenu=(edit, merge, copy, delete, None, color1, color2),
                 beginnerContext=(create, edit, copy, delete),
                 advancedContext=(createMode, editMode, edit, copy,
                     delete, shapeLineColor, shapeFillColor),
@@ -293,9 +296,8 @@ class MainWindow(QMainWindow, WindowMixin):
             action('&Copy here', self.copyShape),
             action('&Move here', self.moveShape)))
 
-        self.tools = self.toolbar('Tools')
         self.actions.beginner = (
-            open, save, None, create, copy, delete, None,
+            open, save, None, create, merge, copy, delete, None,
             zoomIn, zoom, zoomOut, fitWindow, fitWidth)
 
         self.actions.advanced = (
@@ -453,6 +455,11 @@ class MainWindow(QMainWindow, WindowMixin):
     ## Callbacks ##
     def tutorial(self):
         subprocess.Popen([self.screencastViewer, self.screencast])
+
+    def mergeShape(self):
+        assert self.beginner()
+        self.canvas.setEditing(False)
+        self.actions.create.setEnabled(False)
 
     def createShape(self):
         assert self.beginner()

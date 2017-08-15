@@ -10,6 +10,7 @@ before_install:
 
 install:
   - sudo apt-get install -qq -y python-qt4 pyqt4-dev-tools
+  - sudo apt-get install -qq -y python-tk
   - virtualenv venv
   - cp -r $(dirname $(python -c 'import PyQt4; print(PyQt4.__file__)')) venv/lib/python2.7/site-packages/
   - cp $(which pyrcc4) venv/bin/

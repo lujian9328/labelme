@@ -2,21 +2,22 @@ sudo: required
 
 dist: trusty
 
-language: generic
+language: c++  # to use system python
 
 before_install:
-  - sudo -H apt-get install -qq -y libpython2.7-dev
-  - sudo -H apt-get install -qq -y python-minimal
-  - sudo -H apt-get install -qq -y python-tk
+  - sudo apt-get update -qq
+  - sudo apt-get install python-virtualenv
 
 install:
-  - sudo -H apt-get install -qq -y pyqt4-dev-tools
-  - sudo -H apt-get install -qq -y python-qt4
-  - sudo -H pip install -U pip setuptools
-  # scikit-image needs numpy and to be installed by pip
-  - sudo -H pip install numpy scikit-image
-  - sudo -H python setup.py install
+  - sudo apt-get install -qq -y python-qt4 pyqt4-dev-tools
+  - virtualenv venv
+  - cp -r $(dirname $(python -c 'import PyQt4; print(PyQt4.__file__)')) venv/lib/python2.7/site-packages/
+  - cp $(which pyrcc4) venv/bin/
+  - . venv/bin/activate
+  - pip install .
+
+before_script:
+  - pip install -q nose
 
 script:
-  - sudo -H apt-get install -qq -y python-nose
   - nosetests tests
